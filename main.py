@@ -56,4 +56,4 @@ async def on_ready():
 if __name__ == "__main__":
     db.connect()
     db.create_tables([Image], safe=True)
-    client.run(os.environ['FORESTRY_TOKEN'])
+    client.run(os.environ['MEDIA_TOKEN'])
