@@ -4,6 +4,7 @@ from discord import app_commands
 import os
 import time
 from typing import List
+import tokens
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -56,4 +57,4 @@ async def on_ready():
 if __name__ == "__main__":
     db.connect()
     db.create_tables([Image], safe=True)
-    client.run(os.environ['MEDIA_TOKEN'])
+    client.run(tokens.bot_token)
