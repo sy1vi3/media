@@ -108,5 +108,5 @@ async def get_json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, catego
     json_data = []
     for file in files:
         json_data.append(model_to_dict(file))
-    return json.dumps(json_data)
+    return json_data
 
