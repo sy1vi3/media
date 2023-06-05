@@ -87,7 +87,7 @@ async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category
     return FileResponse(f"img/{response_file}")
 
 @app.get("/json")
-async def json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True):
+async def get_json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True):
     _nsfw = [False]
     _nsfl = [False]
     _unsafe = [False]
