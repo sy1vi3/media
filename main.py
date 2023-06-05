@@ -35,6 +35,7 @@ upload_ticker = 0
 
 @tree.command(name="saveimg", description="save an image to the database")
 async def saveimg(interaction, file: discord.Attachment, tags: str, category: str, nsfw: bool=False, political: bool=False, lgbt: bool=False, unsafe: bool=False, nsfl: bool=False):
+    global upload_ticker
     timestamp = str(time.time()).split(".")[0]
     upload_ticker += 1
     snowflake_append = upload_ticker%90000 + 10000
