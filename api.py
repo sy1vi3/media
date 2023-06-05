@@ -84,8 +84,7 @@ async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category
     files = Image.select().where(Image.nsfw.in_(_nsfw) & Image.nsfl.in_(_nsfl) & Image.unsafe.in_(_unsafe) & Image.lgbt.in_(_lgbt) & Image.political.in_(_politcal) & Image.category.in_(split_category)
                                  ).order_by(fn.Random()).limit(2)
     response_file = files[0].filename
-    # return FileResponse(f"img/{response_file}")
-    return FileResponse(f"img/168594722444141.png")
+    return FileResponse(f"img/{response_file}")
 
 @app.get("/json")
 async def get_json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True):
