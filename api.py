@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from playhouse.postgres_ext import *
 app = FastAPI()
 import os
+import json
+from playhouse.shortcuts import model_to_dict, dict_to_model
 
+app.mount("/static", StaticFiles(directory="img"), name="static")
 
 db = PostgresqlExtDatabase('files', user=os.environ['DB_USER'], password=os.environ['DB_PASS'], host=os.environ['DB_HOST'], port=os.environ['DB_PORT'])
 class BaseModel(Model):
@@ -82,4 +86,27 @@ async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category
     response_file = files[0].filename
     return FileResponse(f"img/{response_file}")
 
+@app.get("/json")
+async def json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True):
+    _nsfw = [False]
+    _nsfl = [False]
+    _unsafe = [False]
+    _lgbt = [False]
+    _politcal = [False]
+    split_category = category.split(",")
+    if nsfw:
+        _nsfw.append(True)
+    if nsfl:
+        _nsfl.append(True)
+    if unsafe:
+        _unsafe.append(True)
+    if lgbt:
+        _lgbt.append(True)
+    if political:
+        _politcal.append(True)
+    files = Image.select().where(Image.nsfw.in_(_nsfw) & Image.nsfl.in_(_nsfl) & Image.unsafe.in_(_unsafe) & Image.lgbt.in_(_lgbt) & Image.political.in_(_politcal) & Image.category.in_(split_category))
+    json_data = []
+    for file in files:
+        json_data.append(model_to_dict(file))
+    return json.dumps(json_data)
 
