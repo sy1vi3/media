@@ -31,14 +31,12 @@ class Image(BaseModel):
     type = TextField()
     category = TextField(null=True)
 
-upload_ticker = 0
 
 @tree.command(name="saveimg", description="save an image to the database")
 async def saveimg(interaction, file: discord.Attachment, tags: str, category: str, nsfw: bool=False, political: bool=False, lgbt: bool=False, unsafe: bool=False, nsfl: bool=False):
     global upload_ticker
     timestamp = str(time.time()).split(".")[0]
-    upload_ticker += 1
-    snowflake_append = upload_ticker%90000 + 10000
+    snowflake_append = random.randint(10000,99999)
     filetype = file.filename.split(".")[-1].lower()
     saved_name = f"{timestamp}{snowflake_append}.{filetype}"
     await file.save(f"img/{saved_name}")
