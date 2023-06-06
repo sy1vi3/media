@@ -64,8 +64,11 @@ async def search(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=F
     return FileResponse(f"img/{response_file}")
 
 @app.get("/random")
-async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True):
-    _nsfw = [False]
+async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw=False):
+    if onlynsfw == False:
+        _nsfw = [False]
+    else:
+        _nsfw = []
     _nsfl = [False]
     _unsafe = [False]
     _lgbt = [False]
