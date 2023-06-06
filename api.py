@@ -64,7 +64,7 @@ async def search(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=F
     return FileResponse(f"img/{response_file}")
 
 @app.get("/random")
-async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw=False):
+async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw: bool=False):
     if onlynsfw == False:
         _nsfw = [False]
     else:
@@ -90,8 +90,11 @@ async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category
     return FileResponse(f"img/{response_file}")
 
 @app.get("/json")
-async def get_json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True):
-    _nsfw = [False]
+async def get_json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw: bool=False):
+    if onlynsfw == False:
+        _nsfw = [False]
+    else:
+        _nsfw = []
     _nsfl = [False]
     _unsafe = [False]
     _lgbt = [False]
@@ -113,3 +116,27 @@ async def get_json(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, catego
         json_data.append(model_to_dict(file))
     return json_data
 
+
+@app.get("/stats")
+async def stats(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw: bool=False):
+    if onlynsfw == False:
+        _nsfw = [False]
+    else:
+        _nsfw = []
+    _nsfl = [False]
+    _unsafe = [False]
+    _lgbt = [False]
+    _politcal = [False]
+    split_category = category.split(",")
+    if nsfw:
+        _nsfw.append(True)
+    if nsfl:
+        _nsfl.append(True)
+    if unsafe:
+        _unsafe.append(True)
+    if lgbt:
+        _lgbt.append(True)
+    if political:
+        _politcal.append(True)
+    files = Image.select().where(Image.nsfw.in_(_nsfw) & Image.nsfl.in_(_nsfl) & Image.unsafe.in_(_unsafe) & Image.lgbt.in_(_lgbt) & Image.political.in_(_politcal) & Image.category.in_(split_category))
+    return {'matching query': files.count()}
