@@ -1,2 +1,4 @@
 tokens.py
 img/*
+backup.json
+restore.py
