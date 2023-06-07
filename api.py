@@ -63,6 +63,8 @@ async def search(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=F
         pos -= 1
     else:
         pos = 0
+    if pos+1 > len(filtered):
+        return {'error': 'no matching files'}
     response_file = ranked[pos][0]
     return FileResponse(f"img/{response_file}")
 
