@@ -54,7 +54,10 @@ async def search(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=F
         matches = 0
         for i in file.tags:
             matches += split_tags.count(i)
-        filtered.append([file.filename, matches])
+        if matches > 0:
+            filtered.append([file.filename, matches])
+    if len(filtered) < 1:
+        return {'error': 'no matching files'}
     ranked = sorted(filtered, key=lambda x:x[1], reverse=True)
     if pos > 0:
         pos -= 1
