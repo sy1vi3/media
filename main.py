@@ -44,13 +44,14 @@ async def saveimg(interaction, file: discord.Attachment, tags: str, category: st
     Image.create(guid=timestamp, tags=split_tags, filename=saved_name, nsfw=nsfw, nsfl=nsfl, political=political, lgbt=lgbt, unsafe=unsafe, type=filetype, category=category)
     await interaction.response.send_message(f"{saved_name} saved")
 
-@tree.command(name="remove_by_filename", description="remove an image from the database by its filename")
-async def removeimg(interaction, filename: str):
-    try:
-        image_obj = Image.get(Image.filename == filename)
-        await interaction.response.send_message(f"{filename} deleted")
-    except Exception as e:
-        await interaction.response.send_message(e)
+# @tree.command(name="remove_by_filename", description="remove an image from the database by its filename")
+# async def removeimg(interaction, filename: str):
+#     try:
+#         image_obj = Image.get(Image.filename == filename)
+#         image_obj.delete_instance()
+#         await interaction.response.send_message(f"{filename} deleted")
+#     except Exception as e:
+#         await interaction.response.send_message(e)
     
 
 
