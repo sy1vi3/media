@@ -48,7 +48,7 @@ async def saveimg(interaction, file: discord.Attachment, tags: str, category: st
 async def removeimg(interaction, filename: str):
     try:
         image_obj = Image.get(Image.filename == filename)
-        image_obj.delete()
+        image_obj.delete().execute()
         await interaction.response.send_message(f"{filename} deleted")
     except Exception as e:
         await interaction.response.send_message(e)
