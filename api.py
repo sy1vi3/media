@@ -6,6 +6,7 @@ app = FastAPI()
 import os
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
+import random
 
 app.mount("/static", StaticFiles(directory="img"), name="static")
 
@@ -69,7 +70,8 @@ async def search(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=F
     return FileResponse(f"img/{response_file}")
 
 @app.get("/random")
-async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw: bool=False):
+async def random(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category: str="meme,image,vex,art,other", lgbt: bool=True, political: bool=True, onlynsfw: bool=False):
+    split_tags = tags.lower().split(",")
     if onlynsfw == False:
         _nsfw = [False]
     else:
@@ -89,9 +91,18 @@ async def random(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category
         _lgbt.append(True)
     if political:
         _politcal.append(True)
-    files = Image.select().where(Image.nsfw.in_(_nsfw) & Image.nsfl.in_(_nsfl) & Image.unsafe.in_(_unsafe) & Image.lgbt.in_(_lgbt) & Image.political.in_(_politcal) & Image.category.in_(split_category)
-                                 ).order_by(fn.Random()).limit(2)
-    response_file = files[0].filename
+    files = Image.select().where(Image.nsfw.in_(_nsfw) & Image.nsfl.in_(_nsfl) & Image.unsafe.in_(_unsafe) & Image.lgbt.in_(_lgbt) & Image.political.in_(_politcal) & Image.category.in_(split_category))
+    filtered = list()
+    for file in files:
+        matches = 0
+        for i in file.tags:
+            matches += split_tags.count(i)
+        if matches > 0:
+            filtered.append([file.filename, matches])
+    if len(filtered) < 1:
+        return {'error': 'no matching files'}
+    random.shuffle(filtered)
+    response_file = files[0][0]
     return FileResponse(f"img/{response_file}")
 
 @app.get("/json")
