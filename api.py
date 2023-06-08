@@ -97,7 +97,7 @@ async def random(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bool=F
         matches = 0
         for i in file.tags:
             matches += split_tags.count(i)
-        if matches > 0:
+        if matches > 0 or tags=="":
             filtered.append([file.filename, matches])
     if len(filtered) < 1:
         return {'error': 'no matching files'}
