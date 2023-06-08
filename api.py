@@ -102,7 +102,7 @@ async def random_img(tags: str="", nsfw: bool=False, unsafe: bool=False, nsfl:bo
     if len(filtered) < 1:
         return {'error': 'no matching files'}
     random.shuffle(filtered)
-    response_file = files[0][0]
+    response_file = filtered[0][0]
     return FileResponse(f"img/{response_file}")
 
 @app.get("/json")
