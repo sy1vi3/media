@@ -10,6 +10,7 @@ from playhouse.shortcuts import model_to_dict, dict_to_model
 import random
 import time
 import requests
+from pydantic import BaseModel as otherBaseModel
 
 app.mount("/static", StaticFiles(directory="img"), name="static")
 
@@ -161,7 +162,7 @@ async def stats(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category:
     return {'matching query': files.count()}
 
 
-class Login(BaseModel):
+class Login(otherBaseModel):
     auth_bearer: str
     auth_token: str 
     device_name: str
