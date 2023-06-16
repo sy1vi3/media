@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import PlainTextResponse
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from playhouse.postgres_ext import *
@@ -7,6 +8,8 @@ import os
 import json
 from playhouse.shortcuts import model_to_dict, dict_to_model
 import random
+import time
+import requests
 
 app.mount("/static", StaticFiles(directory="img"), name="static")
 
@@ -156,3 +159,62 @@ async def stats(nsfw: bool=False, unsafe: bool=False, nsfl:bool=False, category:
         _politcal.append(True)
     files = Image.select().where(Image.nsfw.in_(_nsfw) & Image.nsfl.in_(_nsfl) & Image.unsafe.in_(_unsafe) & Image.lgbt.in_(_lgbt) & Image.political.in_(_politcal) & Image.category.in_(split_category))
     return {'matching query': files.count()}
+
+
+class Login(BaseModel):
+    auth_bearer: str
+    auth_token: str 
+    device_name: str
+    device_uuid: str 
+    email: str
+    rdm_endpoint: str
+
+
+@app.get("/atlas/agent", response_class=PlainTextResponse)
+def proxy_agent(request: Request):
+    app_ver = request.headers.get('App-Version-Code')
+    if app_ver is None:
+        app_ver = "22071801"
+    proxy_headers = {
+        'User-Agent': 'khttp/1.0.0-SNAPSHOT',
+        'App-Version-Code': app_ver
+    }
+    r = requests.get("https://discovery.pokemod.dev/atlas/agent", headers=proxy_headers)
+    response_text = r.text
+    print(app_ver)
+    print(r.raw)
+    return response_text
+
+device_tokens = dict()
+@app.get("/atlas/auth/device/login")
+def fake_login(login: Login):
+    snowflake = str(int(time.time()))+str(random.randint(11111,99999))
+    device_tokens[snowflake] = {
+        "auth_bearer": login.auth_bearer,
+        "auth_token": login.auth_token ,
+        "device_name": login.device_name,
+        "device_uuid": login.device_uuid ,
+        "email": login.email,
+        "rdm_endpoint": login.rdm_endpoint,
+        "snowflake": snowflake
+    }
+    return {
+        "auth_token": snowflake,
+        "refresh_token": snowflake,
+        "config": {
+            "auth_bearer": login.auth_bearer,
+            "device_name": login.device_name,
+            "rdm_endpoint": login.rdm_endpoint
+        }
+    }
+
+@app.get("/atlas/device/status")
+def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=None, auth_bearer: str=None):
+    return {
+        "config": {
+            "auth_bearer": auth_bearer,
+            "device_name": device_name,
+            "rdm_endpoint": rdm_endpoint
+        },
+        "payload": []
+    }
