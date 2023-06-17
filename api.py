@@ -187,7 +187,7 @@ def proxy_agent(request: Request):
     return response_text
 
 device_tokens = dict()
-@app.get("/atlas/auth/device/login")
+@app.post("/atlas/auth/device/login")
 def fake_login(login: Login):
     snowflake = str(int(time.time()))+str(random.randint(11111,99999))
     device_tokens[snowflake] = {
