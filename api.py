@@ -219,3 +219,7 @@ def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=N
         },
         "payload": []
     }
+
+@app.get("/hal/modules/getMyAgent")
+def hal_agent():
+    return {'among': 'us'}
