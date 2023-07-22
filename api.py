@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from playhouse.postgres_ext import *
 app = FastAPI()
@@ -223,3 +223,7 @@ def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=N
 @app.get("/hal/modules/getMyAgent")
 def hal_agent():
     return {'among': 'us'}
+
+@app.get("/pokemod_tutorials/ios")
+def ios():
+    return RedirectResponse("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
