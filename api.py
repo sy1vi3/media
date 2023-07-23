@@ -223,11 +223,15 @@ def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=N
 @app.get("/hal/{rest_of_path:path}")
 def hal_agent(request: Request, rest_of_path: str):
     app_ver = request.headers.get('App-Version-Code')
+    _ver = request.headers.get('Version-Code')
     if app_ver is None:
         app_ver = "22071801"
+    if _ver is None:
+        _ver = 63
     proxy_headers = {
         'User-Agent': 'khttp/1.0.0-SNAPSHOT',
-        'App-Version-Code': app_ver
+        'App-Version-Code': app_ver,
+        'Version-Code': 63
     }
     r = requests.get("https://wagner.pokemod.dev/hal/" + rest_of_path, headers=proxy_headers)
     response_text = r.text
