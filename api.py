@@ -240,6 +240,7 @@ def hal_agent(request: Request, rest_of_path: str):
     r = requests.get("https://wagner.pokemod.dev/hal/" + rest_of_path + query_params_str, headers=proxy_headers)
     print("https://wagner.pokemod.dev/hal/" + rest_of_path + query_params_str)
     response_text = r.text
+    print(response_text)
     return response_text
     # return {
     #     "agent_hash":"9ede2eaf97ef30641264069008a0e5745ddc2af2",
