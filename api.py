@@ -227,7 +227,7 @@ def hal_agent(request: Request, rest_of_path: str):
     if app_ver is None:
         app_ver = "22071801"
     if _ver is None:
-        _ver = 63
+        _ver = "63"
     query_params = request.query_params._dict
     query_params_str = "?"
     for param in query_params:
