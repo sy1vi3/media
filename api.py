@@ -228,12 +228,17 @@ def hal_agent(request: Request, rest_of_path: str):
         app_ver = "22071801"
     if _ver is None:
         _ver = 63
+    query_params = request.query_params._dict
+    query_params_str = "?"
+    for param in query_params:
+        query_params_str += f'{param}={query_params[param]}&'
     proxy_headers = {
         'User-Agent': 'khttp/1.0.0-SNAPSHOT',
         'App-Version-Code': app_ver,
         'Version-Code': 63
     }
-    r = requests.get("https://wagner.pokemod.dev/hal/" + rest_of_path, headers=proxy_headers)
+    r = requests.get("https://wagner.pokemod.dev/hal/" + rest_of_path + query_params_str, headers=proxy_headers)
+    print("https://wagner.pokemod.dev/hal/" + rest_of_path + query_params_str)
     response_text = r.text
     return response_text
     # return {
