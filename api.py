@@ -222,7 +222,7 @@ def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=N
 
 # @app.get("/hal/{rest_of_path:path}")
 @app.get("/hal/modules/getAgentHash")
-def hal_agent(request: Request, rest_of_path: str):
+def hal_agent(request: Request):
     # app_ver = request.headers.get('App-Version-Code')
     # _ver = request.headers.get('Version-Code')
     # if app_ver is None:
