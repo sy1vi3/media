@@ -220,9 +220,23 @@ def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=N
         "payload": []
     }
 
-@app.get("/hal/modules/getMyAgent")
-def hal_agent():
-    return {'among': 'us'}
+@app.get("/hal/{rest_of_path:path}")
+def hal_agent(request: Request, rest_of_path: str):
+    app_ver = request.headers.get('App-Version-Code')
+    if app_ver is None:
+        app_ver = "22071801"
+    proxy_headers = {
+        'User-Agent': 'khttp/1.0.0-SNAPSHOT',
+        'App-Version-Code': app_ver
+    }
+    r = requests.get("https://wagner.pokemod.dev/hal/" + rest_of_path, headers=proxy_headers)
+    response_text = r.text
+    return response_text
+    # return {
+    #     "agent_hash":"9ede2eaf97ef30641264069008a0e5745ddc2af2",
+    #     "vpgp_agent_hash":"3cb4b2ab1e53e01a681de95f065e5f60ec916f8c",
+    #     "agent_keys":["BetaTestingModule","StatsRaidMovesets","SelfEggIncubator","Headshot","EncounterInstantResult","InstantLoading","InventoryTweaks","SelfItemCleaner","EncounterPerfectedThrow","PVPMetrics","CosmeticQuestSpoiler","PackRaid","StatsNameplate","EncounterSkipIntro","OverworldIncreaseRadius","PackSpeed","ProfileInstantGifts","SelfBuddyInteraction","TapToTeleport","TeamLeadersDamage","TeamRocket"]
+    # }
 
 @app.get("/pokemod_tutorials/ios")
 def ios():
