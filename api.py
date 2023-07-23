@@ -11,6 +11,7 @@ import random
 import time
 import requests
 from pydantic import BaseModel as otherBaseModel
+from agentresponse import agentResponse
 
 app.mount("/static", StaticFiles(directory="img"), name="static")
 
@@ -248,6 +249,10 @@ def hal_agent(request: Request):
         "vpgp_agent_hash":"3cb4b2ab1e53e01a681de95f065e5f60ec916f8c",
         "agent_keys":["BetaTestingModule","StatsRaidMovesets","SelfEggIncubator","Headshot","EncounterInstantResult","InstantLoading","InventoryTweaks","SelfItemCleaner","EncounterPerfectedThrow","PVPMetrics","CosmeticQuestSpoiler","PackRaid","StatsNameplate","EncounterSkipIntro","OverworldIncreaseRadius","PackSpeed","ProfileInstantGifts","SelfBuddyInteraction","TapToTeleport","TeamLeadersDamage","TeamRocket"]
     }
+
+@app.get("/hal/modules/getMyAgent")
+def hal_agent(request: Request):
+    return agentResponse
 
 @app.get("/hal/auth/heartbeat")
 def hal_agent(request: Request):
