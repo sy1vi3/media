@@ -249,6 +249,10 @@ def hal_agent(request: Request):
         "agent_keys":["BetaTestingModule","StatsRaidMovesets","SelfEggIncubator","Headshot","EncounterInstantResult","InstantLoading","InventoryTweaks","SelfItemCleaner","EncounterPerfectedThrow","PVPMetrics","CosmeticQuestSpoiler","PackRaid","StatsNameplate","EncounterSkipIntro","OverworldIncreaseRadius","PackSpeed","ProfileInstantGifts","SelfBuddyInteraction","TapToTeleport","TeamLeadersDamage","TeamRocket"]
     }
 
+@app.get("/hal/auth/heartbeat")
+def hal_agent(request: Request):
+    return {"message":"Success"}
+
 @app.get("/pokemod_tutorials/ios")
 def ios():
     return RedirectResponse("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
