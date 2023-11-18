@@ -50,9 +50,7 @@ async def removeimg(interaction, filename: str):
     try:
         q = Image.delete().where(Image.filename == filename)
         q.execute()
-        print(q)
         if os.path.exists(f"img/{filename}"):
-            print("removing file")
             os.remove(f"img/{filename}")
         await interaction.response.send_message(f"{filename} deleted")
     except Exception as e:
