@@ -33,7 +33,7 @@ class Image(BaseModel):
 
 
 @tree.command(name="saveimg", description="save an image to the database")
-async def saveimg(interaction, file: discord.Attachment, tags: str, category: str, nsfw: bool=False, political: bool=False, lgbt: bool=False, unsafe: bool=False, nsfl: bool=False):
+async def saveimg(interaction, file: discord.Attachment, tags: str, category: str, nsfw: bool=False, political: bool=False, lgbt: bool=False, unsafe: bool=False, nsfl: bool=False, noindex: bool=False):
     global upload_ticker
     timestamp = str(time.time()).split(".")[0]
     snowflake_append = random.randint(10000,99999)
@@ -41,17 +41,20 @@ async def saveimg(interaction, file: discord.Attachment, tags: str, category: st
     saved_name = f"{timestamp}{snowflake_append}.{filetype}"
     await file.save(f"img/{saved_name}")
     split_tags = tags.split(" ")
-    Image.create(guid=timestamp, tags=split_tags, filename=saved_name, nsfw=nsfw, nsfl=nsfl, political=political, lgbt=lgbt, unsafe=unsafe, type=filetype, category=category)
+    if noindex is not True:
+        Image.create(guid=timestamp, tags=split_tags, filename=saved_name, nsfw=nsfw, nsfl=nsfl, political=political, lgbt=lgbt, unsafe=unsafe, type=filetype, category=category)
     await interaction.response.send_message(f"{saved_name} saved")
 
-# @tree.command(name="remove_by_filename", description="remove an image from the database by its filename")
-# async def removeimg(interaction, filename: str):
-#     try:
-#         image_obj = Image.get(Image.filename == filename)
-#         image_obj.delete_instance()
-#         await interaction.response.send_message(f"{filename} deleted")
-#     except Exception as e:
-#         await interaction.response.send_message(e)
+@tree.command(name="remove_by_filename", description="remove an image from the database by its filename")
+async def removeimg(interaction, filename: str):
+    try:
+        q = Image.delete().where(Image.filename == filename)
+        q.execute()
+        if os.path.exists(f"img/{filename}"):
+            os.remove(f"img/{filename}")
+        await interaction.response.send_message(f"{filename} deleted")
+    except Exception as e:
+        await interaction.response.send_message(e)
     
 
 
