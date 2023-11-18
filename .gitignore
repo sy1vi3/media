@@ -2,3 +2,4 @@ tokens.py
 img/*
 backup.json
 restore.py
+__pycache__/*

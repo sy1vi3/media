@@ -210,34 +210,6 @@ def fake_login(login: Login):
         }
     }
 
-@app.get("/atlas/device/status")
-def fake_status(auth_token: str=None, rdm_endpoint: str=None, device_name: str=None, auth_bearer: str=None):
-    return {
-        "config": {
-            "auth_bearer": auth_bearer,
-            "device_name": device_name,
-            "rdm_endpoint": rdm_endpoint
-        },
-        "payload": []
-    }
-
-@app.get("/hal/modules/getAgentHash")
-def hal_agent(request: Request):
-
-    return {
-        "agent_hash":"9ede2eaf97ef30641264069008a0e5745ddc2af2",
-        "vpgp_agent_hash":"3cb4b2ab1e53e01a681de95f065e5f60ec916f8c",
-        "agent_keys":["BetaTestingModule","StatsRaidMovesets","SelfEggIncubator","Headshot","EncounterInstantResult","InstantLoading","InventoryTweaks","SelfItemCleaner","EncounterPerfectedThrow","PVPMetrics","CosmeticQuestSpoiler","PackRaid","StatsNameplate","EncounterSkipIntro","OverworldIncreaseRadius","PackSpeed","ProfileInstantGifts","SelfBuddyInteraction","TapToTeleport","TeamLeadersDamage","TeamRocket"]
-    }
-
-@app.get("/hal/modules/getMyAgent")
-def hal_agent(request: Request):
-    return agentResponse
-
-@app.get("/hal/auth/heartbeat")
-def hal_agent(request: Request):
-    return {"message":"Success"}
-
 @app.get("/pokemod_tutorials/ios")
 def ios():
     return RedirectResponse("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
