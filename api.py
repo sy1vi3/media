@@ -11,7 +11,6 @@ import random
 import time
 import requests
 from pydantic import BaseModel as otherBaseModel
-from agentresponse import agentResponse
 
 app.mount("/static", StaticFiles(directory="img"), name="static")
 
