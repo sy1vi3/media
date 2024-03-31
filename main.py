@@ -55,8 +55,13 @@ async def removeimg(interaction, filename: str):
         await interaction.response.send_message(f"{filename} deleted")
     except Exception as e:
         await interaction.response.send_message(e)
-    
 
+@tree.command(name="named_file_upload", description="add a file to the mirrors but with a specific filename")
+async def fileupload(interaction, file: discord.Attachment, filename: str):
+    if os.path.exists(f"img/{filename}"):
+        os.remove(f"img/{filename}")
+    await file.save(f"img/{filename}")
+    await interaction.response.send_message(f"{filename} added")
 
 
 @saveimg.autocomplete("category")
