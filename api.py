@@ -216,6 +216,7 @@ def ios():
 
 @app.get("/products/pride-collection-martingale-necklace")
 def necklace():
-    with open("img/necklace.html") as f:
-        content = f.read()
-        return HTMLResponse(content=content, status_code=200)
+    return FileResponse("img/necklace.html")
+    # with open("img/necklace.html") as f:
+    #     content = f.read()
+    #     return HTMLResponse(content=content, status_code=200)
