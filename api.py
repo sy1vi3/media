@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from playhouse.postgres_ext import *
 app = FastAPI()
@@ -212,3 +212,10 @@ def fake_login(login: Login):
 @app.get("/pokemod_tutorials/ios")
 def ios():
     return RedirectResponse("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+
+@app.get("/products/pride-collection-martingale-necklace")
+def necklace():
+    with open("img/necklace.html") as f:
+        content = f.read()
+        return HTMLResponse(content=content, status_code=200)
