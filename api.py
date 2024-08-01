@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import PlainTextResponse
 from fastapi.responses import FileResponse, RedirectResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from playhouse.postgres_ext import *
+from typing import Annotated
 app = FastAPI()
 import os
 import json
@@ -220,3 +221,8 @@ def necklace():
     # with open("img/necklace.html") as f:
     #     content = f.read()
     #     return HTMLResponse(content=content, status_code=200)
+
+@app.post("/trafficlight")
+def trafficlight(data: Annotated[str, Form()]):
+    data_json = json.loads(data)
+    requests.post("http://localhost:3335", json=data_json)
