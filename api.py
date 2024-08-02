@@ -225,5 +225,5 @@ def necklace():
 @app.post("/trafficlight")
 def trafficlight(data: Annotated[str, Form()]):
     data_json = json.loads(data)
-    r = requests.post("https://trafficlight.sylvie.fyi", json=data_json)
+    r = requests.post("http://5.78.81.243:3335", json=data_json)
     print(r.status_code, r.text)
